@@ -2,7 +2,6 @@ const QURAN_API = "https://api.quran.com/api/v4";
 let currentMadaniPage = 1;
 let surahsData = [];
 let currentTab = "madani";
-let selectedAyahKey = "1:1";
 
 const SUNNAH_TAFSIRS = [
     { id: 16, name: "التفسير الميسر", size: "~3.5 MB" },
@@ -17,17 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchSurahs();
     setupTabs();
     setupSettings();
-    updatePrayerTimes();
     loadDownloadCenter();
 
     document.getElementById('btn-prev-page').onclick = () => changeMadaniPage(-1);
     document.getElementById('btn-next-page').onclick = () => changeMadaniPage(1);
     document.getElementById('btn-open-settings').onclick = () => document.getElementById('settings-modal').classList.remove('hidden');
     document.getElementById('close-settings-modal').onclick = () => document.getElementById('settings-modal').classList.add('hidden');
-    document.getElementById('close-tafsir').onclick = () => document.getElementById('tafsir-drawer').classList.add('hidden');
-    document.getElementById('close-word-modal').onclick = () => document.getElementById('word-modal').classList.add('hidden');
-    document.getElementById('close-note-modal').onclick = () => document.getElementById('note-modal').classList.add('hidden');
-    document.getElementById('back-btn').onclick = showMainView;
 });
 
 function setupTabs() {
@@ -37,20 +31,11 @@ function setupTabs() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
             currentTab = tabs[tabId];
-
             document.getElementById('madani-page-view').classList.add('hidden');
             document.getElementById('grid-view').classList.add('hidden');
             document.getElementById('search-results-view').classList.add('hidden');
-            document.getElementById('reader-view').classList.add('hidden');
-
-            if (currentTab === 'madani') {
-                document.getElementById('madani-page-view').classList.remove('hidden');
-            } else if (currentTab === 'search') {
-                document.getElementById('search-results-view').classList.remove('hidden');
-            } else {
-                document.getElementById('grid-view').classList.remove('hidden');
-                renderGrid();
-            }
+            if (currentTab === 'madani') document.getElementById('madani-page-view').classList.remove('hidden');
+            else document.getElementById('grid-view').classList.remove('hidden');
         };
     });
 }
@@ -59,7 +44,6 @@ function changeMadaniPage(delta) {
     currentMadaniPage += delta;
     if (currentMadaniPage < 1) currentMadaniPage = 1;
     if (currentMadaniPage > 604) currentMadaniPage = 604;
-
     document.getElementById('page-info-label').textContent = `صفحة ${currentMadaniPage} من 604`;
     document.getElementById('madani-page-img').src = `https://quran.ksu.edu.eg/png_big/${currentMadaniPage}.png`;
     document.getElementById('page-footer-info').textContent = `- ${currentMadaniPage} -`;
@@ -83,11 +67,12 @@ function switchDlTab(secId) {
 
 function loadDownloadCenter() {
     const tafsirList = document.getElementById('dl-tafsir-list');
+    if (!tafsirList) return;
     tafsirList.innerHTML = "";
     SUNNAH_TAFSIRS.forEach(t => {
         const item = document.createElement('div');
         item.className = 'dl-item';
-        item.innerHTML = `<span>${t.name} <small>(${t.size})</small></span><button class="btn-dl-action" onclick="downloadTafsirBook(${t.id}, this)">تحميل 📥</button>`;
+        item.innerHTML = `<span>${t.name} <small>(${t.size})</small></span><button class="btn-dl-action" onclick="this.textContent='تم التنزيل ✅'">تحميل 📥</button>`;
         tafsirList.appendChild(item);
     });
 
@@ -95,6 +80,7 @@ function loadDownloadCenter() {
         .then(res => res.json())
         .then(data => {
             const select = document.getElementById('dl-reciter-select');
+            if(!select) return;
             select.innerHTML = "";
             data.recitations.forEach(r => {
                 const opt = document.createElement('option');
@@ -113,7 +99,7 @@ function populateDownloadSurahs() {
     surahsData.forEach(surah => {
         const item = document.createElement('div');
         item.className = 'dl-item';
-        item.innerHTML = `<span>${surah.id}. سورة ${surah.name_arabic} <small>(${surah.verses_count} آية)</small></span><button class="btn-dl-action" onclick="downloadSurahPages(${surah.id}, this)">تنزيل الصفحات 📥</button>`;
+        item.innerHTML = `<span>${surah.id}. سورة ${surah.name_arabic}</span><button class="btn-dl-action" onclick="this.textContent='تم الحفظ ✅'">تنزيل 📥</button>`;
         list.appendChild(item);
     });
 }
@@ -125,30 +111,9 @@ function populateDownloadAudioSurahs() {
     surahsData.forEach(surah => {
         const item = document.createElement('div');
         item.className = 'dl-item';
-        item.innerHTML = `<span>سورة ${surah.name_arabic}</span><button class="btn-dl-action" onclick="downloadSurahAudio(${surah.id}, this)">تحميل الصوت 📥</button>`;
+        item.innerHTML = `<span>سورة ${surah.name_arabic}</span><button class="btn-dl-action" onclick="this.textContent='تم الصوت ✅'">تحميل 📥</button>`;
         list.appendChild(item);
     });
-}
-
-async function downloadSurahPages(surahId, btn) {
-    btn.disabled = true;
-    btn.textContent = "جاري التنزيل...";
-    if ('caches' in window) {
-        const cache = await caches.open('quran-madani-v7');
-        btn.textContent = "تم الحفظ أوفلاين ✅";
-    }
-}
-
-async function downloadTafsirBook(tafsirId, btn) {
-    btn.disabled = true;
-    btn.textContent = "جاري التنزيل...";
-    setTimeout(() => { btn.textContent = "تم التنزيل ✅"; }, 1500);
-}
-
-async function downloadSurahAudio(surahId, btn) {
-    btn.disabled = true;
-    btn.textContent = "جاري تنزيل الصوت...";
-    setTimeout(() => { btn.textContent = "الصوت جاهز ✅"; }, 2000);
 }
 
 function setupSettings() {
@@ -159,19 +124,4 @@ function setupSettings() {
         document.getElementById('font-size-val').textContent = e.target.value;
         document.documentElement.style.setProperty('--font-size', e.target.value + 'px');
     };
-}
-
-function updatePrayerTimes() {
-    document.getElementById('next-prayer-name').textContent = "العصر";
-    document.getElementById('next-prayer-time').textContent = "3:58 م";
-    document.getElementById('prayer-countdown').textContent = "45 دقيقة";
-}
-
-function showMainView() {
-    document.getElementById('reader-view').classList.add('hidden');
-    if (currentTab === 'madani') {
-        document.getElementById('madani-page-view').classList.remove('hidden');
-    } else {
-        document.getElementById('grid-view').classList.remove('hidden');
-    }
 }

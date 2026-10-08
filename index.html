@@ -7,13 +7,12 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1b4332">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="./icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- شريط أوقات الصلاة العلوي -->
     <div id="prayer-bar" class="prayer-bar">
         <span>🕌 الصلاة القادمة: <strong id="next-prayer-name">العصر</strong> (<span id="next-prayer-time">3:58 م</span>) • بقي <strong id="prayer-countdown">45 دقيقة</strong></span>
     </div>
@@ -39,7 +38,6 @@
     </section>
 
     <main class="container">
-        <!-- عرض صفحات المصحف المدني المصورة -->
         <section id="madani-page-view" class="view">
             <div class="page-controls">
                 <button id="btn-prev-page" class="btn-page">← الصفحة السابقة</button>
@@ -53,13 +51,11 @@
             </div>
         </section>
 
-        <!-- قائمة السور والأجزاء -->
         <section id="grid-view" class="view hidden">
             <input type="text" id="search-input" placeholder="ابحث عن اسم السورة أو رقمها..." class="search-box">
             <div id="grid-container" class="surah-grid"></div>
         </section>
 
-        <!-- نتائج البحث الشامل -->
         <section id="search-results-view" class="view hidden">
             <div class="search-box-wrapper">
                 <input type="text" id="full-search-input" placeholder="ابحث عن أي كلمة في القرآن الكريم..." class="search-box">
@@ -68,7 +64,6 @@
             <div id="search-results-container" class="results-list"></div>
         </section>
 
-        <!-- القارئ النصي العثماني -->
         <section id="reader-view" class="view hidden">
             <div class="reader-toolbar">
                 <button id="back-btn" class="btn-back">← العودة</button>
@@ -80,7 +75,6 @@
         </section>
     </main>
 
-    <!-- مشغل الصوتيات والتكرار -->
     <footer id="audio-player-bar" class="audio-player hidden">
         <div class="player-info">
             <select id="reciter-select" class="select-box-styled"></select>
@@ -99,7 +93,7 @@
         </div>
     </footer>
 
-    <!-- شاشة الإعدادات ومركز التحميل المخصص -->
+    <!-- شاشة الإعدادات ومركز التحميل المخصص لتوفير الباقة -->
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content" style="max-height:85vh; overflow-y:auto;">
             <span class="close-modal" id="close-settings-modal">&times;</span>
@@ -150,7 +144,6 @@
                 </div>
 
                 <div id="dl-surahs-sec" class="dl-section">
-                    <input type="text" id="dl-surah-search" placeholder="ابحث عن السورة لتحميل صفحاتها..." class="search-box" style="padding:8px; font-size:0.9rem;">
                     <div id="dl-surahs-list" class="download-list"></div>
                 </div>
 
@@ -167,7 +160,6 @@
         </div>
     </div>
 
-    <!-- drawer التفاسير -->
     <div id="tafsir-drawer" class="drawer hidden">
         <div class="drawer-header">
             <h3 id="tafsir-title">تفاسير الآية</h3>
@@ -181,35 +173,6 @@
         <div id="tafsir-accordion-container" class="accordion-list"></div>
     </div>
 
-    <!-- modal إعراب الكلمة -->
-    <div id="word-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" id="close-word-modal">&times;</span>
-            <h3 id="word-title" class="word-highlight">الكلمة</h3>
-            <div id="word-details"><p><strong>المعنى/الموقع:</strong> <span id="word-meaning">-</span></p></div>
-        </div>
-    </div>
-
-    <!-- modal ملاحظات التدبر -->
-    <div id="note-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" id="close-note-modal">&times;</span>
-            <h3>📝 تدبر وملاحظات الآية</h3>
-            <textarea id="note-text-area" rows="5" placeholder="دون خواطرك أو فوائد التفسير حول هذه الآية..." style="width:100%; margin:15px 0; padding:10px; font-family:inherit; border-radius:8px; border:1px solid var(--border-color);"></textarea>
-            <button onclick="saveAyahNote()" class="btn-primary" style="width:100%;">حفظ الملاحظة</button>
-        </div>
-    </div>
-
     <script src="app.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker registered!'))
-        .catch(err => console.log('Service Worker registration failed: ', err));
-    });
-  }
-</script>
-
 </body>
 </html>

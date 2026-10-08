@@ -1,7 +1,6 @@
 {
-  "name": "المصحف الشريف - المصحف المدني",
+  "name": "المصحف الشريف",
   "short_name": "المصحف",
-  "description": "تطبيق قرآني شامل مع صفحات المصحف المدني والأيقونة الرسمية",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fbf8ef",

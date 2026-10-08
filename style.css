@@ -1,83 +1,46 @@
 :root {
-    --bg-color: #fbf8ef;
-    --card-bg: #fffdf7;
-    --text-color: #2c2416;
-    --primary-color: #1b4332;
-    --accent-color: #2d6a4f;
-    --gold-color: #c5a059;
-    --border-color: #e6dfcc;
-    --font-family: 'Amiri', serif;
-    --tafsir-font: 'Tajawal', sans-serif;
-    --font-size: 28px;
+    --bg-color: #fbf8ef; --card-bg: #fffdf7; --text-color: #2c2416;
+    --primary-color: #1b4332; --accent-color: #2d6a4f; --gold-color: #c5a059;
+    --border-color: #e6dfcc; --font-family: 'Amiri', serif; --tafsir-font: 'Tajawal', sans-serif; --font-size: 28px;
 }
-
-[data-theme="dark"] {
-    --bg-color: #121212;
-    --card-bg: #1e1e1e;
-    --text-color: #e0e0e0;
-    --primary-color: #2d6a4f;
-    --border-color: #333333;
-}
-
-[data-theme="light"] {
-    --bg-color: #f8f9fa;
-    --card-bg: #ffffff;
-    --text-color: #212529;
-    --border-color: #dee2e6;
-}
-
+[data-theme="dark"] { --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #e0e0e0; --primary-color: #2d6a4f; --border-color: #333; }
+[data-theme="light"] { --bg-color: #f8f9fa; --card-bg: #fff; --text-color: #212529; --border-color: #dee2e6; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-color); direction: rtl; transition: 0.3s background; }
-
-.prayer-bar { background: #143024; color: #d4af37; text-align: center; padding: 6px 10px; font-size: 0.85rem; font-weight: bold; }
-
+body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-color); direction: rtl; }
+.prayer-bar { background: #143024; color: #d4af37; text-align: center; padding: 6px; font-size: 0.85rem; font-weight: bold; }
 .main-header { background: var(--primary-color); color: #fff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
 .pwa-badge { background: var(--gold-color); color: #000; border: none; padding: 4px 10px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-.icon-btn { background: rgba(255,255,255,0.15); color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: inherit; }
-
+.icon-btn { background: rgba(255,255,255,0.15); color: #fff; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
 .tracker-bar { background: var(--card-bg); padding: 10px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .navigation-tabs { display: flex; gap: 8px; }
-.tab-btn { background: none; border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-family: inherit; color: var(--text-color); }
-.tab-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
-
+.tab-btn { background: none; border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 20px; cursor: pointer; color: var(--text-color); }
+.tab-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
 .container { max-width: 950px; margin: 20px auto; padding: 0 15px; }
-
 .page-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.btn-page { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; }
-
-.madani-frame-wrapper { background: var(--card-bg); border: 2px solid var(--gold-color); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.btn-page { background: var(--accent-color); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+.madani-frame-wrapper { background: var(--card-bg); border: 2px solid var(--gold-color); border-radius: 12px; padding: 15px; text-align: center; }
 .page-header-info, .page-footer-info { font-weight: bold; color: var(--gold-color); padding: 8px 0; font-size: 1.1rem; }
 .madani-img { width: 100%; max-width: 750px; height: auto; border-radius: 6px; }
-
 .quran-display { font-family: var(--font-family); font-size: var(--font-size); line-height: 2.6; text-align: justify; background: var(--card-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); }
-.quran-word { display: inline-block; cursor: pointer; padding: 0 3px; border-radius: 4px; }
-.quran-word:hover { background-color: rgba(197, 160, 89, 0.25); }
-
-.dl-tab-btn { flex: 1; padding: 6px; border: 1px solid var(--border-color); background: none; border-radius: 6px; font-family: inherit; font-size: 0.85rem; cursor: pointer; }
+.dl-tab-btn { flex: 1; padding: 6px; border: 1px solid var(--border-color); background: none; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
 .dl-tab-btn.active { background: var(--gold-color); color: black; font-weight: bold; border-color: var(--gold-color); }
 .download-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 5px; }
 .dl-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
-.dl-item:last-child { border-bottom: none; }
-.btn-dl-action { background: var(--accent-color); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-family: inherit; }
-
-.search-box { width: 100%; padding: 12px 18px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: inherit; margin-bottom: 20px; background: var(--card-bg); color: var(--text-color); }
+.btn-dl-action { background: var(--accent-color); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+.search-box { width: 100%; padding: 12px 18px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; background: var(--card-bg); color: var(--text-color); }
 .surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
 .surah-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-
 .reader-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 18px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-.btn-back, .btn-primary { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: inherit; }
-.btn-secondary { background: var(--gold-color); color: black; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-family: inherit; }
-
+.btn-back, .btn-primary { background: var(--accent-color); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+.btn-secondary { background: var(--gold-color); color: #000; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 .accordion-content { font-family: var(--tafsir-font); line-height: 1.85; font-size: 1.05rem; padding: 15px; }
-
-.drawer { position: fixed; bottom: 0; right: 0; left: 0; background: var(--card-bg); border-top: 3px solid var(--gold-color); max-height: 60vh; overflow-y: auto; padding: 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); z-index: 1000; }
+.drawer { position: fixed; bottom: 0; right: 0; left: 0; background: var(--card-bg); border-top: 3px solid var(--gold-color); max-height: 60vh; overflow-y: auto; padding: 20px; z-index: 1000; }
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; }
 .modal-content { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 90%; max-width: 480px; position: relative; }
 .setting-group { margin-bottom: 18px; }
 .setting-group label { display: block; font-weight: bold; margin-bottom: 6px; }
-
 .close-modal, .close-btn { cursor: pointer; font-weight: bold; float: left; font-size: 1.4rem; }
-.audio-player { position: fixed; bottom: 0; left: 0; right: 0; background: var(--primary-color); color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 900; }
-.play-btn { background: var(--gold-color); border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
-.select-box-styled { padding: 6px 10px; border-radius: 6px; border: none; font-family: inherit; }
+.audio-player { position: fixed; bottom: 0; left: 0; right: 0; background: var(--primary-color); color: #fff; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 900; }
+.play-btn { background: var(--gold-color); border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; }
+.select-box-styled { padding: 6px 10px; border-radius: 6px; border: none; }
 .hidden { display: none !important; }
