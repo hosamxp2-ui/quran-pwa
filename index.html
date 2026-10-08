@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1b4332">
-    <!-- خطوط جوجل الرسمية للمصحف والتفاسير -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -99,11 +98,11 @@
         </div>
     </footer>
 
-    <!-- شاشة الإعدادات الشاملة (Settings Modal) -->
+    <!-- شاشة الإعدادات المتكاملة ومركز التحميل المخصص -->
     <div id="settings-modal" class="modal hidden">
-        <div class="modal-content">
+        <div class="modal-content" style="max-height:85vh; overflow-y:auto;">
             <span class="close-modal" id="close-settings-modal">&times;</span>
-            <h2>⚙️ إعدادات المصحف</h2>
+            <h2>⚙️ إعدادات المصحف ومركز التحميل</h2>
             
             <div class="setting-group">
                 <label>مظهر التطبيق:</label>
@@ -137,10 +136,36 @@
                 <input type="range" id="font-size-slider" min="20" max="45" value="28" style="width:100%;">
             </div>
 
+            <hr style="margin:20px 0; border:0; border-top:1px solid var(--border-color);">
+
             <div class="setting-group">
-                <h3>📥 مركز التنزيلات والأوفلاين</h3>
-                <p><small>إدارة تنزيل التفاسير والصفحات للعمل بدون إنترنت.</small></p>
-                <button onclick="alert('جاري تنزيل وحفظ بيانات التفاسير في ذاكرة الجهاز...')" class="btn-primary" style="width:100%; margin-top:8px;">تنزيل جميع التفاسير السنية للأوفلاين 📥</button>
+                <h3>📥 مركز التحميلات المخصص (للحفاظ على باقة الإنترنت)</h3>
+                <p><small>قم بتنزيل المواد التي تحتاجها فقط للعمل بدون إنترنت:</small></p>
+
+                <!-- تبويبات أجزاء التحميل -->
+                <div class="download-tabs" style="display:flex; gap:5px; margin:10px 0;">
+                    <button class="dl-tab-btn active" onclick="switchDlTab('dl-surahs-sec')">الصفحات بالسورة</button>
+                    <button class="dl-tab-btn" onclick="switchDlTab('dl-tafsir-sec')">التفاسير</button>
+                    <button class="dl-tab-btn" onclick="switchDlTab('dl-audio-sec')">الصوتيات</button>
+                </div>
+
+                <!-- 1. تنزيل صفحات المصحف بالسورة -->
+                <div id="dl-surahs-sec" class="dl-section">
+                    <input type="text" id="dl-surah-search" placeholder="ابحث عن السورة لتحميل صفحاتها..." class="search-box" style="padding:8px; font-size:0.9rem;">
+                    <div id="dl-surahs-list" class="download-list"></div>
+                </div>
+
+                <!-- 2. تنزيل كتب التفاسير منفصلة -->
+                <div id="dl-tafsir-sec" class="dl-section hidden">
+                    <div id="dl-tafsir-list" class="download-list"></div>
+                </div>
+
+                <!-- 3. تنزيل صوتيات القراء بالسورة -->
+                <div id="dl-audio-sec" class="dl-section hidden">
+                    <label style="font-size:0.85rem; display:block; margin-bottom:5px;">اختر القارئ:</label>
+                    <select id="dl-reciter-select" class="select-box-styled" style="width:100%; margin-bottom:10px;"></select>
+                    <div id="dl-audio-surahs-list" class="download-list"></div>
+                </div>
             </div>
         </div>
     </div>

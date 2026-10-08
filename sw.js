@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quran-madani-v5';
+const CACHE_NAME = 'quran-madani-v6';
 const ASSETS = ['./', './index.html', './style.css', './app.js', './manifest.json'];
 
 self.addEventListener('install', (e) => {

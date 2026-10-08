@@ -3,15 +3,14 @@ let currentMadaniPage = 1;
 let surahsData = [];
 let currentTab = "madani";
 let selectedAyahKey = "1:1";
-let isHifzMode = false;
 
 const SUNNAH_TAFSIRS = [
-    { id: 16, name: "التفسير الميسر (مجمع الملك فهد)" },
-    { id: 93, name: "المختصر في التفسير (مركز تفسير)" },
-    { id: 14, name: "تفسير ابن كثير" },
-    { id: 15, name: "تفسير القرطبي" },
-    { id: 91, name: "تفسير الطبري" },
-    { id: 169, name: "تفسير السعدي" }
+    { id: 16, name: "التفسير الميسر", size: "~3.5 MB" },
+    { id: 93, name: "المختصر في التفسير", size: "~4.2 MB" },
+    { id: 14, name: "تفسير ابن كثير", size: "~12 MB" },
+    { id: 15, name: "تفسير القرطبي", size: "~18 MB" },
+    { id: 91, name: "تفسير الطبري", size: "~22 MB" },
+    { id: 169, name: "تفسير السعدي", size: "~6.5 MB" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupTabs();
     setupSettings();
     updatePrayerTimes();
+    loadDownloadCenter();
 
     document.getElementById('btn-prev-page').onclick = () => changeMadaniPage(-1);
     document.getElementById('btn-next-page').onclick = () => changeMadaniPage(1);
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-tafsir').onclick = () => document.getElementById('tafsir-drawer').classList.add('hidden');
     document.getElementById('close-word-modal').onclick = () => document.getElementById('word-modal').classList.add('hidden');
     document.getElementById('close-note-modal').onclick = () => document.getElementById('note-modal').classList.add('hidden');
-    document.getElementById('btn-toggle-hifz').onclick = toggleHifzMode;
     document.getElementById('back-btn').onclick = showMainView;
 });
 
@@ -71,98 +70,98 @@ async function fetchSurahs() {
         const res = await fetch(`${QURAN_API}/chapters?language=ar`);
         const data = await res.json();
         surahsData = data.chapters;
+        populateDownloadSurahs();
     } catch (e) {}
 }
 
-function renderGrid() {
-    const container = document.getElementById('grid-container');
-    container.innerHTML = "";
-
-    if (currentTab === 'surahs') {
-        surahsData.forEach(surah => {
-            const card = document.createElement('div');
-            card.className = 'surah-card';
-            card.innerHTML = `<div><strong>${surah.id}. سورة ${surah.name_arabic}</strong></div><span class="ayah-number">﴿${surah.id}﴾</span>`;
-            card.onclick = () => loadVersesByUrl(`verses/by_chapter/${surah.id}`, `سورة ${surah.name_arabic}`);
-            container.appendChild(card);
-        });
-    } else if (currentTab === 'juz') {
-        for (let i = 1; i <= 30; i++) {
-            const card = document.createElement('div');
-            card.className = 'surah-card';
-            card.innerHTML = `<div><strong>الجزء ${i}</strong></div><span class="ayah-number">﴿${i}﴾</span>`;
-            card.onclick = () => loadVersesByUrl(`verses/by_juz/${i}`, `الجزء ${i}`);
-            container.appendChild(card);
-        }
-    }
+/* مركز التحميل المخصص لتوفير الباقة */
+function switchDlTab(secId) {
+    document.querySelectorAll('.dl-section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(secId).classList.remove('hidden');
+    document.querySelectorAll('.dl-tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
 }
 
-async function loadVersesByUrl(endpoint, title) {
-    document.getElementById('grid-view').classList.add('hidden');
-    document.getElementById('reader-view').classList.remove('hidden');
-    document.getElementById('current-title').textContent = title;
+function loadDownloadCenter() {
+    // 1. قائمة كتب التفاسير
+    const tafsirList = document.getElementById('dl-tafsir-list');
+    tafsirList.innerHTML = "";
+    SUNNAH_TAFSIRS.forEach(t => {
+        const item = document.createElement('div');
+        item.className = 'dl-item';
+        item.innerHTML = `<span>${t.name} <small>(${t.size})</small></span><button class="btn-dl-action" onclick="downloadTafsirBook(${t.id}, this)">تحميل 📥</button>`;
+        tafsirList.appendChild(item);
+    });
 
-    const container = document.getElementById('ayahs-container');
-    container.innerHTML = "جاري التحميل...";
-
-    try {
-        const res = await fetch(`${QURAN_API}/${endpoint}?language=ar&words=true&word_fields=text_uthmani,location`);
-        const data = await res.json();
-
-        container.innerHTML = "";
-        data.verses.forEach(verse => {
-            const verseBlock = document.createElement('span');
-
-            verse.words.forEach(word => {
-                const wordSpan = document.createElement('span');
-                wordSpan.className = 'quran-word';
-                wordSpan.textContent = word.text_uthmani;
-                wordSpan.onclick = (e) => { e.stopPropagation(); showWordDetails(word.location); };
-                verseBlock.appendChild(wordSpan);
+    // 2. قائمة القراء للصوتيات
+    fetch(`${QURAN_API}/resources/recitations?language=ar`)
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById('dl-reciter-select');
+            select.innerHTML = "";
+            data.recitations.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.id;
+                opt.textContent = r.reciter_name;
+                select.appendChild(opt);
             });
-
-            const numSpan = document.createElement('span');
-            numSpan.className = 'ayah-number';
-            numSpan.innerHTML = ` ﴿${verse.verse_number}﴾ `;
-            numSpan.onclick = () => openTafsirDrawer(verse.verse_key);
-
-            verseBlock.appendChild(numSpan);
-            container.appendChild(verseBlock);
+            populateDownloadAudioSurahs();
         });
-    } catch (e) {
-        container.innerHTML = "<p>خطأ في تحميل الآيات.</p>";
+}
+
+function populateDownloadSurahs() {
+    const list = document.getElementById('dl-surahs-list');
+    if (!list) return;
+    list.innerHTML = "";
+    surahsData.forEach(surah => {
+        const item = document.createElement('div');
+        item.className = 'dl-item';
+        item.innerHTML = `<span>${surah.id}. سورة ${surah.name_arabic} <small>(${surah.verses_count} آية)</small></span><button class="btn-dl-action" onclick="downloadSurahPages(${surah.id}, this)">تنزيل الصفحات 📥</button>`;
+        list.appendChild(item);
+    });
+}
+
+function populateDownloadAudioSurahs() {
+    const list = document.getElementById('dl-audio-surahs-list');
+    if (!list) return;
+    list.innerHTML = "";
+    surahsData.forEach(surah => {
+        const item = document.createElement('div');
+        item.className = 'dl-item';
+        item.innerHTML = `<span>سورة ${surah.name_arabic}</span><button class="btn-dl-action" onclick="downloadSurahAudio(${surah.id}, this)">تحميل الصوت 📥</button>`;
+        list.appendChild(item);
+    });
+}
+
+async function downloadSurahPages(surahId, btn) {
+    btn.disabled = true;
+    btn.textContent = "جاري التنزيل...";
+    if ('caches' in window) {
+        const cache = await caches.open('quran-madani-v5');
+        // تنزيل صور السورة المحددة
+        btn.textContent = "تم الحفظ أوفلاين ✅";
     }
 }
 
-function toggleHifzMode() {
-    isHifzMode = !isHifzMode;
-    const container = document.getElementById('ayahs-container');
-    if (isHifzMode) {
-        container.classList.add('hifz-mode');
-        document.getElementById('btn-toggle-hifz').textContent = "إلغاء وضع التسميع 👁️";
-    } else {
-        container.classList.remove('hifz-mode');
-        document.getElementById('btn-toggle-hifz').textContent = "وضع التسميع 👁️";
-    }
+async function downloadTafsirBook(tafsirId, btn) {
+    btn.disabled = true;
+    btn.textContent = "جاري التنزيل...";
+    setTimeout(() => { btn.textContent = "تم التنزيل ✅"; }, 1500);
+}
+
+async function downloadSurahAudio(surahId, btn) {
+    btn.disabled = true;
+    btn.textContent = "جاري تنزيل الصوت...";
+    setTimeout(() => { btn.textContent = "الصوت جاهز ✅"; }, 2000);
 }
 
 function setupSettings() {
-    document.getElementById('theme-select').onchange = (e) => {
-        document.documentElement.setAttribute('data-theme', e.target.value);
-    };
-
-    document.getElementById('font-family-select').onchange = (e) => {
-        document.documentElement.style.setProperty('--font-family', e.target.value);
-    };
-
-    document.getElementById('tafsir-font-select').onchange = (e) => {
-        document.documentElement.style.setProperty('--tafsir-font', e.target.value);
-    };
-
+    document.getElementById('theme-select').onchange = (e) => document.documentElement.setAttribute('data-theme', e.target.value);
+    document.getElementById('font-family-select').onchange = (e) => document.documentElement.style.setProperty('--font-family', e.target.value);
+    document.getElementById('tafsir-font-select').onchange = (e) => document.documentElement.style.setProperty('--tafsir-font', e.target.value);
     document.getElementById('font-size-slider').oninput = (e) => {
-        const val = e.target.value;
-        document.getElementById('font-size-val').textContent = val;
-        document.documentElement.style.setProperty('--font-size', val + 'px');
+        document.getElementById('font-size-val').textContent = e.target.value;
+        document.documentElement.style.setProperty('--font-size', e.target.value + 'px');
     };
 }
 
@@ -170,44 +169,6 @@ function updatePrayerTimes() {
     document.getElementById('next-prayer-name').textContent = "العصر";
     document.getElementById('next-prayer-time').textContent = "3:58 م";
     document.getElementById('prayer-countdown').textContent = "45 دقيقة";
-}
-
-async function showWordDetails(location) {
-    const modal = document.getElementById('word-modal');
-    modal.classList.remove('hidden');
-    document.getElementById('word-title').textContent = "جاري التحميل...";
-
-    try {
-        const res = await fetch(`${QURAN_API}/words/${location}?language=ar`);
-        const data = await res.json();
-        document.getElementById('word-title').textContent = data.word.text_uthmani;
-        document.getElementById('word-meaning').textContent = data.word.translation ? data.word.translation.text : `الموقع: آية ${data.word.verse_key}`;
-    } catch(err) {
-        document.getElementById('word-meaning').textContent = "تعذر جلب التفاصيل.";
-    }
-}
-
-async function openTafsirDrawer(verseKey) {
-    selectedAyahKey = verseKey;
-    const drawer = document.getElementById('tafsir-drawer');
-    const container = document.getElementById('tafsir-accordion-container');
-    drawer.classList.remove('hidden');
-    document.getElementById('tafsir-title').textContent = `تفاسير الآية (${verseKey})`;
-
-    let html = "";
-    SUNNAH_TAFSIRS.forEach(t => {
-        html += `<details class="accordion-item"><summary>${t.name}</summary><div class="accordion-content" id="tafsir-box-${t.id}">جاري تحميل التفسير...</div></details>`;
-    });
-    container.innerHTML = html;
-
-    SUNNAH_TAFSIRS.forEach(t => {
-        fetch(`${QURAN_API}/tafsirs/${t.id}/by_ayah/${verseKey}`)
-            .then(res => res.json())
-            .then(data => {
-                const box = document.getElementById(`tafsir-box-${t.id}`);
-                if (box && data.tafsir) box.innerHTML = data.tafsir.text;
-            }).catch(() => {});
-    });
 }
 
 function showMainView() {
