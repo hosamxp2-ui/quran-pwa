@@ -42,7 +42,6 @@ body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); co
 
 .container { max-width: 950px; margin: 20px auto; padding: 0 15px; }
 
-/* إطار صفحات المصحف المدني */
 .page-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .btn-page { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; }
 
@@ -50,12 +49,10 @@ body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); co
 .page-header-info, .page-footer-info { font-weight: bold; color: var(--gold-color); padding: 8px 0; font-size: 1.1rem; }
 .madani-img { width: 100%; max-width: 750px; height: auto; border-radius: 6px; }
 
-/* المصحف النصي */
 .quran-display { font-family: var(--font-family); font-size: var(--font-size); line-height: 2.6; text-align: justify; background: var(--card-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); }
 .quran-word { display: inline-block; cursor: pointer; padding: 0 3px; border-radius: 4px; }
 .quran-word:hover { background-color: rgba(197, 160, 89, 0.25); }
 
-/* مركز التحميل المخصص */
 .dl-tab-btn { flex: 1; padding: 6px; border: 1px solid var(--border-color); background: none; border-radius: 6px; font-family: inherit; font-size: 0.85rem; cursor: pointer; }
 .dl-tab-btn.active { background: var(--gold-color); color: black; font-weight: bold; border-color: var(--gold-color); }
 .download-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 5px; }

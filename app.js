@@ -74,7 +74,6 @@ async function fetchSurahs() {
     } catch (e) {}
 }
 
-/* مركز التحميل المخصص لتوفير الباقة */
 function switchDlTab(secId) {
     document.querySelectorAll('.dl-section').forEach(s => s.classList.add('hidden'));
     document.getElementById(secId).classList.remove('hidden');
@@ -83,7 +82,6 @@ function switchDlTab(secId) {
 }
 
 function loadDownloadCenter() {
-    // 1. قائمة كتب التفاسير
     const tafsirList = document.getElementById('dl-tafsir-list');
     tafsirList.innerHTML = "";
     SUNNAH_TAFSIRS.forEach(t => {
@@ -93,7 +91,6 @@ function loadDownloadCenter() {
         tafsirList.appendChild(item);
     });
 
-    // 2. قائمة القراء للصوتيات
     fetch(`${QURAN_API}/resources/recitations?language=ar`)
         .then(res => res.json())
         .then(data => {
@@ -137,8 +134,7 @@ async function downloadSurahPages(surahId, btn) {
     btn.disabled = true;
     btn.textContent = "جاري التنزيل...";
     if ('caches' in window) {
-        const cache = await caches.open('quran-madani-v5');
-        // تنزيل صور السورة المحددة
+        const cache = await caches.open('quran-madani-v7');
         btn.textContent = "تم الحفظ أوفلاين ✅";
     }
 }

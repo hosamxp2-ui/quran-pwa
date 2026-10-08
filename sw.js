@@ -1,5 +1,5 @@
-const CACHE_NAME = 'quran-madani-v6';
-const ASSETS = ['./', './index.html', './style.css', './app.js', './manifest.json'];
+const CACHE_NAME = 'quran-madani-v7';
+const ASSETS = ['./', './index.html', './style.css', './app.js', './manifest.json', './icon.png'];
 
 self.addEventListener('install', (e) => {
     e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
