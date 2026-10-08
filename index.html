@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المصحف الشريف - المصحف المدني المتقدم</title>
+    <title>المصحف الشريف - المصحف المدني</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1b4332">
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="prayer-bar" class="prayer-bar">
@@ -20,7 +20,6 @@
     <header class="main-header">
         <div class="logo-area">
             <h1>📖 المصحف الشريف</h1>
-            <button id="install-btn" class="pwa-badge" hidden>تثبيت التطبيق 📲</button>
         </div>
         <div class="header-actions">
             <button id="btn-open-settings" class="icon-btn">⚙️ الإعدادات</button>
@@ -32,12 +31,11 @@
             <button id="tab-madani" class="tab-btn active">المصحف المصور</button>
             <button id="tab-surahs" class="tab-btn">السور</button>
             <button id="tab-juz" class="tab-btn">الأجزاء</button>
-            <button id="tab-search" class="tab-btn">البحث الشامل 🔍</button>
         </div>
-        <div class="bookmarks-summary" id="bookmarks-bar"></div>
     </section>
 
     <main class="container">
+        <!-- عرض صفحات المصحف المصورة -->
         <section id="madani-page-view" class="view">
             <div class="page-controls">
                 <button id="btn-prev-page" class="btn-page">← الصفحة السابقة</button>
@@ -46,54 +44,19 @@
             </div>
             <div class="madani-frame-wrapper">
                 <div id="page-header-info" class="page-header-info">سورة الفاتحة • الجزء 1</div>
-                <img id="madani-page-img" src="https://quran.ksu.edu.eg/png_big/1.png" alt="صفحة المصحف" class="madani-img">
+                <img id="madani-page-img" src="https://www.qurancentral.com/wp-content/uploads/madani/1.png" alt="صفحة المصحف" class="madani-img" onerror="this.src='https://quran.ksu.edu.eg/png_big/1.png'">
                 <div id="page-footer-info" class="page-footer-info">- 1 -</div>
             </div>
         </section>
 
+        <!-- قائمة السور -->
         <section id="grid-view" class="view hidden">
-            <input type="text" id="search-input" placeholder="ابحث عن اسم السورة أو رقمها..." class="search-box">
+            <input type="text" id="search-input" placeholder="ابحث عن اسم السورة..." class="search-box" oninput="filterSurahs(this.value)">
             <div id="grid-container" class="surah-grid"></div>
-        </section>
-
-        <section id="search-results-view" class="view hidden">
-            <div class="search-box-wrapper">
-                <input type="text" id="full-search-input" placeholder="ابحث عن أي كلمة في القرآن الكريم..." class="search-box">
-                <button id="btn-do-search" class="btn-primary">بحث</button>
-            </div>
-            <div id="search-results-container" class="results-list"></div>
-        </section>
-
-        <section id="reader-view" class="view hidden">
-            <div class="reader-toolbar">
-                <button id="back-btn" class="btn-back">← العودة</button>
-                <h2 id="current-title">سورة...</h2>
-                <button id="btn-toggle-hifz" class="btn-secondary">وضع التسميع 👁️</button>
-            </div>
-            <div class="bismillah" id="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-            <div id="ayahs-container" class="quran-display"></div>
         </section>
     </main>
 
-    <footer id="audio-player-bar" class="audio-player hidden">
-        <div class="player-info">
-            <select id="reciter-select" class="select-box-styled"></select>
-            <span id="now-playing-label" class="now-playing-txt">الآية المتلوة: -</span>
-        </div>
-        <div class="player-controls">
-            <button id="btn-play-pause" class="play-btn">▶</button>
-            <div class="loop-control">
-                <select id="loop-count" class="select-box-styled">
-                    <option value="1">مرة واحدة</option>
-                    <option value="3">3 مرات</option>
-                    <option value="5">5 مرات</option>
-                    <option value="999">لا نهائي</option>
-                </select>
-            </div>
-        </div>
-    </footer>
-
-    <!-- شاشة الإعدادات ومركز التحميل المخصص لتوفير الباقة -->
+    <!-- الإعدادات -->
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content" style="max-height:85vh; overflow-y:auto;">
             <span class="close-modal" id="close-settings-modal">&times;</span>
@@ -109,68 +72,10 @@
             </div>
 
             <div class="setting-group">
-                <label>خط نص القرآن الكريم:</label>
-                <select id="font-family-select" class="select-box-styled" style="width:100%;">
-                    <option value="'Amiri', serif">خط أميري قرآني</option>
-                    <option value="'Tajawal', sans-serif">خط تجوال حديث</option>
-                    <option value="'Noto Naskh Arabic', serif">خط النسخ الشريف</option>
-                </select>
-            </div>
-
-            <div class="setting-group">
-                <label>خط نصوص التفاسير والترجمات:</label>
-                <select id="tafsir-font-select" class="select-box-styled" style="width:100%;">
-                    <option value="'Tajawal', sans-serif">خط تجوال (واضح ومريح للقراءة)</option>
-                    <option value="'Cairo', sans-serif">خط القاهرة (هندسي بارز)</option>
-                    <option value="'Amiri', serif">الخط الأميري (نسخي كلاسيكي)</option>
-                </select>
-            </div>
-
-            <div class="setting-group">
-                <label>حجم الخط القرآني (<span id="font-size-val">28</span>px):</label>
-                <input type="range" id="font-size-slider" min="20" max="45" value="28" style="width:100%;">
-            </div>
-
-            <hr style="margin:20px 0; border:0; border-top:1px solid var(--border-color);">
-
-            <div class="setting-group">
-                <h3>📥 مركز التحميلات المخصص (لتوفير الباقة)</h3>
-                <p><small>قم بتنزيل المواد التي تحتاجها فقط للعمل بدون إنترنت:</small></p>
-
-                <div class="download-tabs" style="display:flex; gap:5px; margin:10px 0;">
-                    <button class="dl-tab-btn active" onclick="switchDlTab('dl-surahs-sec')">الصفحات بالسورة</button>
-                    <button class="dl-tab-btn" onclick="switchDlTab('dl-tafsir-sec')">التفاسير</button>
-                    <button class="dl-tab-btn" onclick="switchDlTab('dl-audio-sec')">الصوتيات</button>
-                </div>
-
-                <div id="dl-surahs-sec" class="dl-section">
-                    <div id="dl-surahs-list" class="download-list"></div>
-                </div>
-
-                <div id="dl-tafsir-sec" class="dl-section hidden">
-                    <div id="dl-tafsir-list" class="download-list"></div>
-                </div>
-
-                <div id="dl-audio-sec" class="dl-section hidden">
-                    <label style="font-size:0.85rem; display:block; margin-bottom:5px;">اختر القارئ:</label>
-                    <select id="dl-reciter-select" class="select-box-styled" style="width:100%; margin-bottom:10px;"></select>
-                    <div id="dl-audio-surahs-list" class="download-list"></div>
-                </div>
+                <h3>📥 مركز التحميلات المخصص</h3>
+                <div id="dl-surahs-list" class="download-list"></div>
             </div>
         </div>
-    </div>
-
-    <div id="tafsir-drawer" class="drawer hidden">
-        <div class="drawer-header">
-            <h3 id="tafsir-title">تفاسير الآية</h3>
-            <button id="close-tafsir" class="close-btn">✕</button>
-        </div>
-        <div class="bookmark-actions">
-            <button class="bm-btn bm-read" onclick="setLocalBookmark('آخر قراءة')">🟢 آخر قراءة</button>
-            <button class="bm-btn bm-save" onclick="setLocalBookmark('المفضلة')">🟡 المفضلة</button>
-            <button class="bm-btn bm-note" onclick="openNoteModal()">📝 ملاحظة تدبر</button>
-        </div>
-        <div id="tafsir-accordion-container" class="accordion-list"></div>
     </div>
 
     <script src="app.js"></script>

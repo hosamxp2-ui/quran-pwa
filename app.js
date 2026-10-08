@@ -3,20 +3,10 @@ let currentMadaniPage = 1;
 let surahsData = [];
 let currentTab = "madani";
 
-const SUNNAH_TAFSIRS = [
-    { id: 16, name: "التفسير الميسر", size: "~3.5 MB" },
-    { id: 93, name: "المختصر في التفسير", size: "~4.2 MB" },
-    { id: 14, name: "تفسير ابن كثير", size: "~12 MB" },
-    { id: 15, name: "تفسير القرطبي", size: "~18 MB" },
-    { id: 91, name: "تفسير الطبري", size: "~22 MB" },
-    { id: 169, name: "تفسير السعدي", size: "~6.5 MB" }
-];
-
 document.addEventListener('DOMContentLoaded', () => {
     fetchSurahs();
     setupTabs();
     setupSettings();
-    loadDownloadCenter();
 
     document.getElementById('btn-prev-page').onclick = () => changeMadaniPage(-1);
     document.getElementById('btn-next-page').onclick = () => changeMadaniPage(1);
@@ -25,17 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupTabs() {
-    const tabs = { 'tab-madani': 'madani', 'tab-surahs': 'surahs', 'tab-juz': 'juz', 'tab-search': 'search' };
+    const tabs = { 'tab-madani': 'madani', 'tab-surahs': 'surahs', 'tab-juz': 'juz' };
     Object.keys(tabs).forEach(tabId => {
-        document.getElementById(tabId).onclick = (e) => {
+        const btn = document.getElementById(tabId);
+        if(!btn) return;
+        btn.onclick = (e) => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
             currentTab = tabs[tabId];
             document.getElementById('madani-page-view').classList.add('hidden');
             document.getElementById('grid-view').classList.add('hidden');
-            document.getElementById('search-results-view').classList.add('hidden');
-            if (currentTab === 'madani') document.getElementById('madani-page-view').classList.remove('hidden');
-            else document.getElementById('grid-view').classList.remove('hidden');
+            if (currentTab === 'madani') {
+                document.getElementById('madani-page-view').classList.remove('hidden');
+            } else {
+                document.getElementById('grid-view').classList.remove('hidden');
+                renderGrid(surahsData);
+            }
         };
     });
 }
@@ -54,74 +49,32 @@ async function fetchSurahs() {
         const res = await fetch(`${QURAN_API}/chapters?language=ar`);
         const data = await res.json();
         surahsData = data.chapters;
-        populateDownloadSurahs();
+        renderGrid(surahsData);
     } catch (e) {}
 }
 
-function switchDlTab(secId) {
-    document.querySelectorAll('.dl-section').forEach(s => s.classList.add('hidden'));
-    document.getElementById(secId).classList.remove('hidden');
-    document.querySelectorAll('.dl-tab-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-}
-
-function loadDownloadCenter() {
-    const tafsirList = document.getElementById('dl-tafsir-list');
-    if (!tafsirList) return;
-    tafsirList.innerHTML = "";
-    SUNNAH_TAFSIRS.forEach(t => {
-        const item = document.createElement('div');
-        item.className = 'dl-item';
-        item.innerHTML = `<span>${t.name} <small>(${t.size})</small></span><button class="btn-dl-action" onclick="this.textContent='تم التنزيل ✅'">تحميل 📥</button>`;
-        tafsirList.appendChild(item);
-    });
-
-    fetch(`${QURAN_API}/resources/recitations?language=ar`)
-        .then(res => res.json())
-        .then(data => {
-            const select = document.getElementById('dl-reciter-select');
-            if(!select) return;
-            select.innerHTML = "";
-            data.recitations.forEach(r => {
-                const opt = document.createElement('option');
-                opt.value = r.id;
-                opt.textContent = r.reciter_name;
-                select.appendChild(opt);
-            });
-            populateDownloadAudioSurahs();
-        });
-}
-
-function populateDownloadSurahs() {
-    const list = document.getElementById('dl-surahs-list');
-    if (!list) return;
-    list.innerHTML = "";
-    surahsData.forEach(surah => {
-        const item = document.createElement('div');
-        item.className = 'dl-item';
-        item.innerHTML = `<span>${surah.id}. سورة ${surah.name_arabic}</span><button class="btn-dl-action" onclick="this.textContent='تم الحفظ ✅'">تنزيل 📥</button>`;
-        list.appendChild(item);
+function renderGrid(dataList) {
+    const container = document.getElementById('grid-container');
+    if(!container) return;
+    container.innerHTML = "";
+    dataList.forEach(surah => {
+        const card = document.createElement('div');
+        card.className = 'surah-card';
+        card.innerHTML = `<div><strong>${surah.id}. سورة ${surah.name_arabic}</strong></div><span>صفحة ${surah.pages[0]}</span>`;
+        card.onclick = () => {
+            currentMadaniPage = surah.pages[0];
+            document.getElementById('tab-madani').click();
+            changeMadaniPage(0);
+        };
+        container.appendChild(card);
     });
 }
 
-function populateDownloadAudioSurahs() {
-    const list = document.getElementById('dl-audio-surahs-list');
-    if (!list) return;
-    list.innerHTML = "";
-    surahsData.forEach(surah => {
-        const item = document.createElement('div');
-        item.className = 'dl-item';
-        item.innerHTML = `<span>سورة ${surah.name_arabic}</span><button class="btn-dl-action" onclick="this.textContent='تم الصوت ✅'">تحميل 📥</button>`;
-        list.appendChild(item);
-    });
+function filterSurahs(query) {
+    const filtered = surahsData.filter(s => s.name_arabic.includes(query) || s.id.toString() === query);
+    renderGrid(filtered);
 }
 
 function setupSettings() {
     document.getElementById('theme-select').onchange = (e) => document.documentElement.setAttribute('data-theme', e.target.value);
-    document.getElementById('font-family-select').onchange = (e) => document.documentElement.style.setProperty('--font-family', e.target.value);
-    document.getElementById('tafsir-font-select').onchange = (e) => document.documentElement.style.setProperty('--tafsir-font', e.target.value);
-    document.getElementById('font-size-slider').oninput = (e) => {
-        document.getElementById('font-size-val').textContent = e.target.value;
-        document.documentElement.style.setProperty('--font-size', e.target.value + 'px');
-    };
 }
