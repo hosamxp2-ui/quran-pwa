@@ -1,23 +1,11 @@
 {
-  "name": "تطبيق القرآن الكريم",
-  "short_name": "القرآن الكريم",
-  "description": "تطبيق مصحف شريف تفاعلي يعمل بدون إنترنت بصيغة PWA",
+  "name": "تطبيق المصحف الشريف المتقدم",
+  "short_name": "المصحف",
+  "description": "تطبيق قرآني شامل مع التفاسير السنية ومعاني الكلمات",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f8f9fa",
+  "background_color": "#fbf8ef",
   "theme_color": "#1b4332",
   "dir": "rtl",
-  "lang": "ar",
-  "icons": [
-    {
-      "src": "icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "lang": "ar"
 }

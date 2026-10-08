@@ -1,178 +1,77 @@
 :root {
+    --bg-color: #fbf8ef;
+    --card-bg: #fffdf7;
+    --text-color: #2c2416;
     --primary-color: #1b4332;
     --accent-color: #2d6a4f;
-    --gold-color: #d4af37;
+    --gold-color: #c5a059;
+    --border-color: #e6dfcc;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --primary-color: #2d6a4f;
+    --border-color: #333333;
+}
+
+[data-theme="light"] {
     --bg-color: #f8f9fa;
     --card-bg: #ffffff;
-    --text-color: #2b2b2b;
-    --border-color: #e0e0e0;
+    --text-color: #212529;
+    --border-color: #dee2e6;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Traditional Arabic', 'Amiri', 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-color); direction: rtl; transition: 0.3s background; }
 
-body {
-    font-family: 'Tajawal', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    direction: rtl;
-    line-height: 1.6;
-}
+.main-header { background: var(--primary-color); color: #fff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+.pwa-badge { background: var(--gold-color); color: #000; border: none; padding: 4px 10px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+.icon-btn-select { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-family: inherit; }
 
-.app-header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+.tracker-bar { background: var(--card-bg); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; font-size: 0.95rem; }
+.goal-info { display: flex; align-items: center; gap: 10px; }
+progress { width: 120px; height: 12px; }
 
-.install-btn {
-    background-color: var(--gold-color);
-    color: #111;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-}
+.container { max-width: 950px; margin: 20px auto; padding: 0 15px; }
+.search-box { width: 100%; padding: 12px 18px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: inherit; margin-bottom: 20px; background: var(--card-bg); color: var(--text-color); }
 
-.container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 0 15px;
-}
+.surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+.surah-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
+.surah-card:hover { border-color: var(--gold-color); transform: translateY(-2px); }
 
-.search-box {
-    width: 100%;
-    padding: 12px 18px;
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 1rem;
-    font-family: inherit;
-    margin-bottom: 20px;
-    outline: none;
-}
+.reader-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 18px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; }
+.btn-back { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: inherit; }
 
-.search-box:focus {
-    border-color: var(--accent-color);
-}
+.bismillah { font-size: 1.8rem; text-align: center; margin: 20px 0; color: var(--primary-color); }
+.quran-display { font-size: 1.85rem; line-height: 2.6; text-align: justify; background: var(--card-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); }
 
-.surah-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 15px;
-}
+.quran-word { display: inline-block; cursor: pointer; padding: 0 3px; border-radius: 4px; }
+.quran-word:hover { background-color: rgba(197, 160, 89, 0.25); }
 
-.surah-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+.ayah-number { color: var(--gold-color); font-weight: bold; margin: 0 6px; cursor: pointer; font-size: 1.4rem; display: inline-block; }
+.ayah-number:hover { text-decoration: underline; }
 
-.surah-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-}
+.drawer { position: fixed; bottom: 0; right: 0; left: 0; background: var(--card-bg); border-top: 3px solid var(--gold-color); max-height: 60vh; overflow-y: auto; padding: 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); z-index: 1000; }
+.drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.close-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-color); }
 
-.surah-num {
-    width: 40px;
-    height: 40px;
-    background-color: #e8f5e9;
-    color: var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-left: 15px;
-}
+.bookmark-actions { margin-bottom: 15px; }
+.bm-btn { border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-left: 8px; font-weight: bold; font-family: inherit; }
+.bm-read { background: #e8f5e9; color: #2e7d32; }
+.bm-save { background: #fff8e1; color: #f57f17; }
 
-.surah-info h3 {
-    font-size: 1.1rem;
-    color: var(--primary-color);
-}
+.accordion-item { border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+.accordion-item summary { font-weight: bold; padding: 12px; background: rgba(0,0,0,0.03); cursor: pointer; }
+.accordion-item details[open] summary { background: var(--gold-color); color: #fff; }
+.accordion-content { padding: 15px; line-height: 1.8; font-size: 1.05rem; }
 
-.surah-info span {
-    font-size: 0.85rem;
-    color: #666;
-}
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.modal-content { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 90%; max-width: 420px; position: relative; }
+.close-modal { cursor: pointer; font-weight: bold; float: left; font-size: 1.4rem; }
 
-.hidden {
-    display: none !important;
-}
+.audio-player { position: fixed; bottom: 0; left: 0; right: 0; background: var(--primary-color); color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 900; }
+.select-box-styled { padding: 6px 10px; border-radius: 6px; border: none; font-family: inherit; }
 
-.reader-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--card-bg);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.btn-back {
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.select-box {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    font-family: inherit;
-}
-
-.bismillah {
-    font-family: 'Amiri', serif;
-    font-size: 1.8rem;
-    text-align: center;
-    margin: 25px 0;
-    color: var(--primary-color);
-}
-
-.quran-text {
-    font-family: 'Amiri', serif;
-    font-size: 1.6rem;
-    line-height: 2.4;
-    text-align: justify;
-    background-color: var(--card-bg);
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-}
-
-.ayah-span {
-    display: inline;
-    cursor: pointer;
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-
-.ayah-span:hover {
-    background-color: #e8f5e9;
-}
-
-.ayah-badge {
-    color: var(--gold-color);
-    font-size: 1.3rem;
-    margin: 0 6px;
-    font-weight: bold;
-}
+.hidden { display: none !important; }
