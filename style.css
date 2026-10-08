@@ -30,28 +30,36 @@ body { font-family: 'Traditional Arabic', 'Amiri', 'Tajawal', sans-serif; backgr
 .pwa-badge { background: var(--gold-color); color: #000; border: none; padding: 4px 10px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 .icon-btn-select { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-family: inherit; }
 
-.tracker-bar { background: var(--card-bg); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; font-size: 0.95rem; }
-.goal-info { display: flex; align-items: center; gap: 10px; }
-progress { width: 120px; height: 12px; }
+.tracker-bar { background: var(--card-bg); padding: 10px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.navigation-tabs { display: flex; gap: 8px; }
+.tab-btn { background: none; border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-family: inherit; color: var(--text-color); }
+.tab-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
 .container { max-width: 950px; margin: 20px auto; padding: 0 15px; }
 .search-box { width: 100%; padding: 12px 18px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: inherit; margin-bottom: 20px; background: var(--card-bg); color: var(--text-color); }
+.search-box-wrapper { display: flex; gap: 10px; }
 
-.surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+.surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
 .surah-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
 .surah-card:hover { border-color: var(--gold-color); transform: translateY(-2px); }
 
-.reader-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 18px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-.btn-back { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: inherit; }
+.reader-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 18px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.btn-back, .btn-primary { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: inherit; }
+.btn-offline { background: var(--gold-color); color: #000; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-family: inherit; }
 
 .bismillah { font-size: 1.8rem; text-align: center; margin: 20px 0; color: var(--primary-color); }
 .quran-display { font-size: 1.85rem; line-height: 2.6; text-align: justify; background: var(--card-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); }
+
+.verse-block { display: inline; transition: background 0.3s; border-radius: 6px; padding: 2px 4px; }
+.verse-block.playing-verse { background-color: rgba(197, 160, 89, 0.35); border-right: 4px solid var(--gold-color); }
 
 .quran-word { display: inline-block; cursor: pointer; padding: 0 3px; border-radius: 4px; }
 .quran-word:hover { background-color: rgba(197, 160, 89, 0.25); }
 
 .ayah-number { color: var(--gold-color); font-weight: bold; margin: 0 6px; cursor: pointer; font-size: 1.4rem; display: inline-block; }
-.ayah-number:hover { text-decoration: underline; }
+
+.results-list .search-result-item { background: var(--card-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 12px; cursor: pointer; }
+.results-list .search-result-item:hover { border-color: var(--gold-color); }
 
 .drawer { position: fixed; bottom: 0; right: 0; left: 0; background: var(--card-bg); border-top: 3px solid var(--gold-color); max-height: 60vh; overflow-y: auto; padding: 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); z-index: 1000; }
 .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -61,6 +69,7 @@ progress { width: 120px; height: 12px; }
 .bm-btn { border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-left: 8px; font-weight: bold; font-family: inherit; }
 .bm-read { background: #e8f5e9; color: #2e7d32; }
 .bm-save { background: #fff8e1; color: #f57f17; }
+.bm-note { background: #e3f2fd; color: #1565c0; }
 
 .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
 .accordion-item summary { font-weight: bold; padding: 12px; background: rgba(0,0,0,0.03); cursor: pointer; }
@@ -68,10 +77,12 @@ progress { width: 120px; height: 12px; }
 .accordion-content { padding: 15px; line-height: 1.8; font-size: 1.05rem; }
 
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-.modal-content { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 90%; max-width: 420px; position: relative; }
+.modal-content { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 90%; max-width: 450px; position: relative; }
 .close-modal { cursor: pointer; font-weight: bold; float: left; font-size: 1.4rem; }
 
 .audio-player { position: fixed; bottom: 0; left: 0; right: 0; background: var(--primary-color); color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 900; }
+.play-btn { background: var(--gold-color); border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
 .select-box-styled { padding: 6px 10px; border-radius: 6px; border: none; font-family: inherit; }
+.now-playing-txt { font-size: 0.85rem; margin-top: 4px; display: block; }
 
 .hidden { display: none !important; }

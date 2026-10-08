@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المصحف الشريف المتقدم</title>
+    <title>المصحف الشريف المتقدم الشامل</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1b4332">
@@ -24,46 +24,64 @@
     </header>
 
     <section class="tracker-bar">
-        <div class="goal-info">
-            <span>الورْد اليومي: <strong id="daily-progress">0 / 5</strong> صفحات</span>
-            <progress id="goal-bar" value="0" max="5"></progress>
+        <div class="navigation-tabs">
+            <button id="tab-surahs" class="tab-btn active">السور</button>
+            <button id="tab-juz" class="tab-btn">الأجزاء (30)</button>
+            <button id="tab-pages" class="tab-btn">الصفحات (604)</button>
+            <button id="tab-search" class="tab-btn">البحث الشامل 🔍</button>
         </div>
         <div class="bookmarks-summary" id="bookmarks-bar"></div>
     </section>
 
     <main class="container">
-        <section id="surah-list-view" class="view">
+        <!-- قائمة السور والأجزاء والصفحات -->
+        <section id="grid-view" class="view">
             <input type="text" id="search-input" placeholder="ابحث عن اسم السورة أو رقمها..." class="search-box">
-            <div id="surah-container" class="surah-grid"></div>
+            <div id="grid-container" class="surah-grid"></div>
         </section>
 
+        <!-- نتائج البحث الشامل -->
+        <section id="search-results-view" class="view hidden">
+            <div class="search-box-wrapper">
+                <input type="text" id="full-search-input" placeholder="اكتب كلمة أو نصاً من الآية للبحث..." class="search-box">
+                <button id="btn-do-search" class="btn-primary">بحث</button>
+            </div>
+            <div id="search-results-container" class="results-list"></div>
+        </section>
+
+        <!-- قارئ المصحف -->
         <section id="reader-view" class="view hidden">
             <div class="reader-toolbar">
-                <button id="back-btn" class="btn-back">← العودة للقائمة</button>
-                <h2 id="current-surah-title">سورة...</h2>
+                <button id="back-btn" class="btn-back">← العودة</button>
+                <h2 id="current-title">سورة...</h2>
+                <button id="btn-download-offline" class="btn-offline">تنزيل السورة للأوفلاين 📥</button>
             </div>
             <div class="bismillah" id="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
             <div id="ayahs-container" class="quran-display"></div>
         </section>
     </main>
 
+    <!-- مشغل الصوت والتكرار -->
     <footer id="audio-player-bar" class="audio-player hidden">
         <div class="player-info">
             <select id="reciter-select" class="select-box-styled"></select>
+            <span id="now-playing-label" class="now-playing-txt">الآية المتلوة: -</span>
         </div>
         <div class="player-controls">
+            <button id="btn-play-pause" class="play-btn">▶</button>
             <div class="loop-control">
                 <span>التكرار:</span>
                 <select id="loop-count" class="select-box-styled">
                     <option value="1">مرة واحدة</option>
                     <option value="3">3 مرات</option>
                     <option value="5">5 مرات</option>
-                    <option value="999">تكرار لا نهائي</option>
+                    <option value="999">لا نهائي</option>
                 </select>
             </div>
         </div>
     </footer>
 
+    <!-- drawer التفاسير والتدبر -->
     <div id="tafsir-drawer" class="drawer hidden">
         <div class="drawer-header">
             <h3 id="tafsir-title">تفاسير الآية</h3>
@@ -71,18 +89,28 @@
         </div>
         <div class="bookmark-actions">
             <button class="bm-btn bm-read" onclick="setLocalBookmark('آخر قراءة')">🟢 آخر قراءة</button>
-            <button class="bm-btn bm-save" onclick="setLocalBookmark('المفضلة')">🟡 حفظ الآية</button>
+            <button class="bm-btn bm-save" onclick="setLocalBookmark('المفضلة')">🟡 المفضلة</button>
+            <button class="bm-btn bm-note" onclick="openNoteModal()">📝 تدبر وملاحظة</button>
         </div>
         <div id="tafsir-accordion-container" class="accordion-list"></div>
     </div>
 
+    <!-- modal إعراب الكلمة -->
     <div id="word-modal" class="modal hidden">
         <div class="modal-content">
             <span class="close-modal" id="close-word-modal">&times;</span>
             <h3 id="word-title" class="word-highlight">الكلمة</h3>
-            <div id="word-details">
-                <p><strong>المعنى/الموقع:</strong> <span id="word-meaning">-</span></p>
-            </div>
+            <div id="word-details"><p><strong>المعنى/الموقع:</strong> <span id="word-meaning">-</span></p></div>
+        </div>
+    </div>
+
+    <!-- modal ملاحظات التدبر -->
+    <div id="note-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="close-note-modal">&times;</span>
+            <h3>📝 تدبر وملاحظات الآية</h3>
+            <textarea id="note-text-area" rows="5" placeholder="دون خواطرك أو فوائد التفسير حول هذه الآية..." style="width:100%; margin:15px 0; padding:10px; font-family:inherit; border-radius:8px; border:1px solid var(--border-color);"></textarea>
+            <button onclick="saveAyahNote()" class="btn-primary" style="width:100%;">حفظ الملاحظة</button>
         </div>
     </div>
 
